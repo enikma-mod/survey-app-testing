@@ -31,8 +31,8 @@ export class LoginComponent {
   onSubmit(): void {
     const { username, password } = this.form;
 
-    this.authService.login(username, password).subscribe(
-      data => {
+    this.authService.login(username, password).subscribe({
+      next: (data) => {
         this.tokenStorage.saveToken(data.accessToken);
         this.tokenStorage.saveUser(data);
 
@@ -41,14 +41,15 @@ export class LoginComponent {
         this.roles = this.tokenStorage.getUser().roles;
         this.reloadPage();
       },
-      err => {
+      error: (err) => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
-    );
+   });
   }
 
   reloadPage(): void {
     window.location.reload();
   }
 }
+
